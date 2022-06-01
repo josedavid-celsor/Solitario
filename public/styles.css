@@ -1,0 +1,141 @@
+body {
+  background-image: url('./img/green-velvet.jpg');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: 100% 100%;
+}
+
+
+/* 
+#tablero {
+  display: flex;
+  flex-direction: row;
+} */
+
+#columna1 {
+  border: 1px solid black;
+  height: 100%;
+  list-style: none;
+  padding: 2px;
+}
+
+#columna2 {
+  border: 1px solid black;
+  height: 100%;
+  padding: 2px;
+  list-style: none;
+}
+
+#columna3 {
+  border: 1px solid black;
+  height: 100%;
+  padding: 2px;
+  list-style: none;
+}
+
+#columna4 {
+  border: 1px solid black;
+  height: 100%;
+  padding: 2px;
+  list-style: none;
+}
+
+#columna5 {
+  border: 1px solid black;
+  height: 100%;
+  list-style: none;
+  padding: 2px;
+}
+
+#columna6 {
+  border: 1px solid black;
+  height: 100%;
+  list-style: none;
+  padding: 2px;
+}
+
+#columna7 {
+  border: 1px solid black;
+  height: 100%;
+  list-style: none;
+  padding: 2px;
+}
+
+#mazos {
+  display: flex;
+  flex-direction: column;
+  margin-left: 40%;
+  padding: 2px;
+}
+
+#mazo_Entrada {
+  border: 1px solid black;
+  list-style: none;
+  padding: 2px;
+}
+
+#almacen {
+  border: 1px solid black;
+  height: 100%;
+  list-style: none;
+  padding: 2px;
+}
+
+#almacen2 {
+  border: 1px solid black;
+  height: 100%;
+  list-style: none;
+  padding: 2px;
+}
+
+#almacen3 {
+  border: 1px solid black;
+  height: 100%;
+  list-style: none;
+  padding: 2px;
+}
+
+#almacen4 {
+  border: 1px solid black;
+  height: 100%;
+  list-style: none;
+  padding: 2px;
+}
+
+.carta {
+  height: 6rem;
+  width: auto;
+}
+
+#listElementDown {
+  height: 6rem;
+  width: auto;
+}
+
+img {
+  height: 100px;
+  width: auto;
+}
+
+ul {
+  list-style: none;
+}
+
+.list-group-item {
+  background-color: transparent !important;
+}
+
+.contenedorColumnas {
+  display: flex;
+}
+
+.columDisplay {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.columDisplay li {
+  /* padding: 50px; */
+  grid-row-start: 1;
+  grid-column-start: 1;
+}
