@@ -34,7 +34,10 @@ export class Solitario {
             htmlTotal += '</ul></li>';
         }
         htmlTotal += ` <ul class="list-group">
-                <li id="mazo_Entrada" class="list-group-item">
+                <li id="mazoEntrada" class="list-group-item">
+
+                </li>
+                <li id="mazoRobo" class="list-group-item-horizontal">
 
                 </li>
                 <li id="almacemn" class="list-group-item">
@@ -52,10 +55,12 @@ export class Solitario {
             </ul>`;
         console.log('xd');
         document.getElementById('cuerpoTablero').innerHTML = htmlTotal;
+        console.log(this.tablero);
+        this.pintarMazo();
     }
     /**
-        * Asigna evento
-        */
+    * Asigna evento
+    */
     asignarEvento() {
         const cartasHtml = document.getElementsByClassName('carta');
         for (let i = 0; i < cartasHtml.length; i++) {
@@ -102,7 +107,6 @@ export class Solitario {
                 }
             }
         }
-        console.log(cartasDependientes);
         const idColumnaDes = ev.target.id + 'Carta';
         const columnaDestino = ev.path[2];
         if (this.moverCarta(idCarta, idColumnaDes)) {
@@ -110,10 +114,15 @@ export class Solitario {
             for (let carta of cartasDependientes) {
                 ev.path[2].appendChild(document.getElementById(carta.id));
             }
-            console.log(cartaAnterior.firstChild.nodeValue);
-            /*  if(cartaAnterior.firstChild.src === 'no.png'){
-                 cartaAnterior.firstChild.src = cartaAnterior.firstChild.id + '.PNG'
-             } */
+            const identificador = cartaAnterior.id.split('Carta')[0];
+            const cartaDescubierta = document.getElementById(identificador);
+            console.log(identificador);
+            console.log(cartaDescubierta);
+            console.log(cartaDescubierta.getAttribute('src'));
+            if (cartaDescubierta.getAttribute('src') === 'img/no.PNG') {
+                cartaDescubierta.setAttribute('src', 'img/' + identificador + '.PNG');
+                cartaAnterior.addEventListener('dragstart', this.drag);
+            }
         }
     }
     /**
@@ -127,6 +136,27 @@ export class Solitario {
                 return true;
             }
         }
+    }
+    /**
+     * Pintar mazo html
+     */
+    pintarMazo() {
+        let htmlMazoEntrada;
+        let ultimaCarta;
+        for (let carta of this.tablero.mazoEntrada) {
+            htmlMazoEntrada += this.pintarCarta(carta);
+            ultimaCarta = carta;
+        }
+        document.getElementById("mazoEntrada").innerHTML = htmlMazoEntrada;
+        document.getElementById(ultimaCarta.numero + ultimaCarta.palo + 'Carta').addEventListener('click', this.robarCarta.bind(this));
+    }
+    /**
+     * Voltear carta del mazo al robarla
+     */
+    robarCarta(ev) {
+        ev.preventDefault();
+        let idCartaMazoEntrada = document.getElementById(ev.target.id);
+        let mazoRobo = document.getElementById;
     }
 }
 const solitario = new Solitario();

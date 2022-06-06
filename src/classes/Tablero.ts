@@ -32,6 +32,7 @@ export class Tablero {
     constructor() {
         this.rellenarTodasCartas();
         this.rellenarColumnas();
+        this.rellenarMazoEntrada();
     }
     /**
      * Funcion para rellenar el Array de las cartas 

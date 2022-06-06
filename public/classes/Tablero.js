@@ -10,6 +10,7 @@ export class Tablero {
         this.palos = ['C', 'D', 'T', 'P'];
         this.rellenarTodasCartas();
         this.rellenarColumnas();
+        this.rellenarMazoEntrada();
     }
     /**
      * Funcion para rellenar el Array de las cartas

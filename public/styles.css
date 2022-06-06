@@ -113,6 +113,7 @@ body {
 }
 
 img {
+    border: 2px solid black;
     height: 100px;
     width: auto;
 }
@@ -140,6 +141,14 @@ ul {
     grid-column-start: 1;
 }
 
-.carta {
+.carta+.carta {
     margin-top: -7vh;
+}
+
+#mazoEntrada .carta {
+    margin-top: -90px !important;
+}
+
+.mazoRobo {
+    border: 2px solid black;
 }
