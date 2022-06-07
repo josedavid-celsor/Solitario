@@ -43,19 +43,19 @@ export class Solitario {
                 <li id="mazoEntrada" class="list-group-item">
 
                 </li>
-                <li id="mazoRobo" class="list-group-item-horizontal">
+                <li id="mazoRobo" class="list-group-item">
 
                 </li>
-                <li id="almacemn" class="list-group-item">
+                <li id="almacenTrebol" class="list-group-item">
 
                 </li>
-                <li id="almacen2" class="list-group-item">
+                <li id="almacenCorazones" class="list-group-item">
 
                 </li>
-                <li id="almacen3" class="list-group-item">
+                <li id="almacenPicas" class="list-group-item">
 
                 </li>
-                <li id="almacen4" class="list-group-item">
+                <li id="almacenDiamantes" class="list-group-item">
 
                 </li>
             </ul>`
@@ -78,6 +78,14 @@ export class Solitario {
             columnasHtml[i].addEventListener('dragover', this.allowDrop);
         }
         console.log(columnasHtml);
+        document.getElementById('almacenCorazones').addEventListener('drop', this.dropAlmacen.bind(this));
+        document.getElementById('almacenCorazones').addEventListener('dragover', this.allowDrop);
+        document.getElementById('almacenPicas').addEventListener('drop', this.dropAlmacen.bind(this));
+        document.getElementById('almacenPicas').addEventListener('dragover', this.allowDrop);
+        document.getElementById('almacenTrebol').addEventListener('drop', this.dropAlmacen.bind(this));
+        document.getElementById('almacenTrebol').addEventListener('dragover', this.allowDrop);
+        document.getElementById('almacenDiamantes').addEventListener('drop', this.dropAlmacen.bind(this));
+        document.getElementById('almacenDiamantes').addEventListener('dragover', this.allowDrop);
     }
     /**
      * Funcion Drag and Drop mover carta
@@ -101,9 +109,7 @@ export class Solitario {
         const idCarta = data + 'Carta';
         const cartaOrigenHtml = document.getElementById(idCarta);
         const hermanos = cartaOrigenHtml.parentElement.children;
-        const cartaAnterior:any = cartaOrigenHtml.previousSibling; 
         console.log(hermanos);
-        console.log(cartaAnterior);
         let originalEncontrado = false;
         let cartasDependientes: any[] = [];
         for (let i = 0; i < hermanos.length; i++) {
@@ -120,22 +126,13 @@ export class Solitario {
         const columnaDestino = ev.path[2];
         if (this.moverCarta(idCarta, idColumnaDes)) {
             ev.path[2].appendChild(document.getElementById(idCarta));
-            for(let carta of cartasDependientes){
+            for (let carta of cartasDependientes) {
                 ev.path[2].appendChild(document.getElementById(carta.id));
             }
-            const identificador = cartaAnterior.id.split('Carta')[0];
-            const cartaDescubierta = document.getElementById(identificador);
-            console.log(identificador);
-            console.log(cartaDescubierta);
-            console.log(cartaDescubierta.getAttribute('src'));
-          if(cartaDescubierta.getAttribute('src') === 'img/no.PNG'){
-               cartaDescubierta.setAttribute('src', 'img/' + identificador + '.PNG');
-               cartaAnterior.addEventListener('dragstart', this.drag)
-               
-            }  
+            this.descubrirCarta(cartaOrigenHtml);
         }
-        
-        
+
+
     }
 
     /**
@@ -155,10 +152,10 @@ export class Solitario {
     /**
      * Pintar mazo html
      */
-     pintarMazo() {
+    pintarMazo() {
         let htmlMazoEntrada;
-        let ultimaCarta:Carta;
-        for(let carta of this.tablero.mazoEntrada){
+        let ultimaCarta: Carta;
+        for (let carta of this.tablero.mazoEntrada) {
             htmlMazoEntrada += this.pintarCarta(carta);
             ultimaCarta = carta;
         }
@@ -169,12 +166,88 @@ export class Solitario {
     /**
      * Voltear carta del mazo al robarla
      */
-    robarCarta(ev){
+    robarCarta(ev) {
         ev.preventDefault();
-        let idCartaMazoEntrada = document.getElementById(ev.target.id);
-        let mazoRobo = document.getElementById
+        let primeraCartaMazoEntrada: Carta = Carta.generaCartaId(ev.target.id);
+        const mazoRobo = document.getElementById('mazoRobo');
+        const cartaMazoEntrada = document.getElementById(primeraCartaMazoEntrada.numero + primeraCartaMazoEntrada.palo + 'Carta');
+        cartaMazoEntrada.addEventListener('dragstart', this.drag);
+        mazoRobo.appendChild(cartaMazoEntrada);
+        document.getElementById(ev.target.id).setAttribute('src', 'img/' + ev.target.id + '.PNG');
+        this.asignarNuevoRobo();
     }
 
+    /**
+     * Asignar robo a la ultima carta del Mazo entrada
+     */
+    asignarNuevoRobo() {
+        const ultimaCarta = document.getElementById("mazoEntrada").lastChild;
+        ultimaCarta.addEventListener('click', this.robarCarta.bind(this));
+
+    }
+    /**
+     * Funcion para poder almacenar cartas en los almacenes
+     */
+    dropAlmacen(ev) {
+        console.log(ev);
+        const almacenDestino = ev.target;
+        var dataCartaMandada = ev.dataTransfer.getData("text");
+        const cartaHTML = document.getElementById(dataCartaMandada + 'Carta');
+        const cartaMandada: Carta = Carta.generaCartaId(dataCartaMandada);
+        console.log(almacenDestino.lastChild);
+        console.log(cartaMandada.numero);
+        console.log(almacenDestino.children[almacenDestino.children.length - 1]);
+        if(this.compruebaPalo(cartaMandada, almacenDestino.id)){
+            if (!almacenDestino.children[almacenDestino.children.length - 1] && cartaMandada.numero === 1) {
+                //No tiene ninguna carta aun
+                this.descubrirCarta(cartaHTML);
+                almacenDestino.appendChild(cartaHTML);
+            }
+        }
+        
+    }
+
+    /**
+     * Comprueba el palo de la carta
+     */
+    compruebaPalo(carta: Carta, almacen: string) {
+        switch (almacen) {
+            case 'almacenCorazones':
+                if (carta.palo === 'C') {
+                    return true
+                }
+                break;
+            case 'almacenTrebol':
+                if (carta.palo === 'T') {
+                    return true
+                }
+                break;
+            case 'almacenPicas':
+                if (carta.palo === 'P') {
+                    return true
+                }
+                break;
+            case 'almacenDiamantes':
+                if (carta.palo === 'D') {
+                    return true
+                }
+                break;
+        }
+    }
+
+    /**
+     * Descubre carta
+     */
+    descubrirCarta(cartaHTML){
+        const cartaAnterior: any = cartaHTML.previousSibling;
+        const identificador = cartaAnterior.id.split('Carta')[0];
+        const cartaDescubierta = document.getElementById(identificador);
+        if (cartaDescubierta.getAttribute('src') === 'img/no.PNG') {
+            cartaDescubierta.setAttribute('src', 'img/' + identificador + '.PNG');
+            cartaAnterior.addEventListener('dragstart', this.drag)
+
+        }
+    }
 }
 
 
