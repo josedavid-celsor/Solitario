@@ -27,34 +27,21 @@ body {
 }
 
 #almacenTrebol {
-    border: 1px solid black;
-    height: 21vh;
-    list-style: none;
-    padding: 2px;
     background-color: gray !important;
 }
 
 #almacenCorazones {
-    border: 1px solid black;
-    height: 21vh;
-    list-style: none;
-    padding: 2px;
+
     background-color: red !important;
 }
 
 #almacenPicas {
-    border: 1px solid black;
-    height: 21vh;
-    list-style: none;
-    padding: 2px;
+
     background-color: black !important;
 }
 
 #almacenDiamantes {
-    border: 1px solid black;
-    height: 21vh;
-    list-style: none;
-    padding: 2px;
+
     background-color: rgba(138, 12, 12, 0.884) !important;
 }
 
@@ -94,23 +81,36 @@ ul {
     grid-column-start: 1;
 }
 
-.carta+.carta {
+.columnasHTML .carta+.carta {
     margin-top: -7vh;
 }
 
-#mazoEntrada .carta {
-    margin-top: -90px !important;
-}
 
-.mazoRobo {
+#mazoEntrada{
+    margin-left: 2vw;
+}
+#mazoRobo {
     border: 1px solid black;
-    height: 21vh;
+    height: 20vh;
     list-style: none;
     padding: 2px;
+    margin-left: 2vw;
+}
+#mazoRobo > .carta + .carta{
+    margin-top: -13vh!important;
+}
+#mazoEntrada > .carta + .carta{
+    margin-top: -16vh!important;
 }
 
-
+.depositos{
+    position: absolute;
+    bottom: 0;
+}
 
 .deposito{
-    min-width:5vw;
+    width:5vw;
+    height: 21vh;
+    
+    display: inline-block;
 }

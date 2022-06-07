@@ -39,20 +39,7 @@ export class Solitario {
                 <li id="mazoRobo" class="list-group-item deposito">
 
                 </li>
-                <div class='depositos'>
-                <li id="almacenTrebol" class="list-group-item deposito">
 
-                </li>
-                <li id="almacenCorazones" class="list-group-item deposito">
-
-                </li>
-                <li id="almacenPicas" class="list-group-item deposito">
-
-                </li>
-                <li id="almacenDiamantes" class="list-group-item deposito">
-
-                </li>
-                </div>
             `;
         document.getElementById('cuerpoTablero').innerHTML = htmlTotal;
         this.pintarMazo();
@@ -138,11 +125,14 @@ export class Solitario {
      * Pintar mazo html
      */
     pintarMazo() {
-        let htmlMazoEntrada;
+        let htmlMazoEntrada = '';
         let ultimaCarta;
         for (let carta of this.tablero.mazoEntrada) {
-            htmlMazoEntrada += this.pintarCarta(carta);
-            ultimaCarta = carta;
+            if (carta) {
+                const htmlAPintar = this.pintarCarta(carta);
+                htmlMazoEntrada += htmlAPintar;
+                ultimaCarta = carta;
+            }
         }
         document.getElementById("mazoEntrada").innerHTML = htmlMazoEntrada;
         const cartaHTML = document.getElementById(ultimaCarta.numero + ultimaCarta.palo + 'Carta');
