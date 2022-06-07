@@ -28,7 +28,6 @@ export class Solitario {
     *Pinta las columnas donde ira cada una de las cartas 
     */
     pintarTableroHtml() {
-        console.log(this.tablero)
         let htmlTotal: string = ``;
 
         for (let columnaCarta of this.tablero.columnasCartas) {
@@ -39,29 +38,29 @@ export class Solitario {
             htmlTotal += '</ul></li>';
 
         }
-        htmlTotal += ` <ul class="list-group">
-                <li id="mazoEntrada" class="list-group-item">
+        htmlTotal += ` 
+                <li id="mazoEntrada" class="list-group-item deposito">
 
                 </li>
-                <li id="mazoRobo" class="list-group-item">
+                <li id="mazoRobo" class="list-group-item deposito">
 
                 </li>
-                <li id="almacenTrebol" class="list-group-item">
+                <div class='depositos'>
+                <li id="almacenTrebol" class="list-group-item deposito">
 
                 </li>
-                <li id="almacenCorazones" class="list-group-item">
+                <li id="almacenCorazones" class="list-group-item deposito">
 
                 </li>
-                <li id="almacenPicas" class="list-group-item">
+                <li id="almacenPicas" class="list-group-item deposito">
 
                 </li>
-                <li id="almacenDiamantes" class="list-group-item">
+                <li id="almacenDiamantes" class="list-group-item deposito">
 
                 </li>
-            </ul>`
-        console.log('xd')
+                </div>
+            `
         document.getElementById('cuerpoTablero').innerHTML = htmlTotal;
-        console.log(this.tablero);
         this.pintarMazo();
     }
     /**
@@ -74,18 +73,21 @@ export class Solitario {
         }
         const columnasHtml = document.getElementsByClassName('columnasHTML');
         for (let i = 0; i < columnasHtml.length; i++) {
-            columnasHtml[i].addEventListener('drop', this.drop.bind(this));
+            columnasHtml[i].addEventListener('drop', this.drop.bind({ app: this, html: columnasHtml[i] }));
             columnasHtml[i].addEventListener('dragover', this.allowDrop);
         }
-        console.log(columnasHtml);
-        document.getElementById('almacenCorazones').addEventListener('drop', this.dropAlmacen.bind(this));
-        document.getElementById('almacenCorazones').addEventListener('dragover', this.allowDrop);
-        document.getElementById('almacenPicas').addEventListener('drop', this.dropAlmacen.bind(this));
-        document.getElementById('almacenPicas').addEventListener('dragover', this.allowDrop);
-        document.getElementById('almacenTrebol').addEventListener('drop', this.dropAlmacen.bind(this));
-        document.getElementById('almacenTrebol').addEventListener('dragover', this.allowDrop);
-        document.getElementById('almacenDiamantes').addEventListener('drop', this.dropAlmacen.bind(this));
-        document.getElementById('almacenDiamantes').addEventListener('dragover', this.allowDrop);
+        const almacenCorazones = document.getElementById('almacenCorazones');
+        const almacenPicas = document.getElementById('almacenPicas');
+        const almacenTrebol = document.getElementById('almacenTrebol');
+        const almacenDiamantes = document.getElementById('almacenDiamantes');
+        almacenCorazones.addEventListener('drop', this.dropAlmacen.bind({ app: this, html: almacenCorazones }));
+        almacenCorazones.addEventListener('dragover', this.allowDrop);
+        almacenPicas.addEventListener('drop', this.dropAlmacen.bind({ app: this, html: almacenPicas }));
+        almacenPicas.addEventListener('dragover', this.allowDrop);
+        almacenTrebol.addEventListener('drop', this.dropAlmacen.bind({ app: this, html: almacenTrebol }));
+        almacenTrebol.addEventListener('dragover', this.allowDrop);
+        almacenDiamantes.addEventListener('drop', this.dropAlmacen.bind({ app: this, html: almacenDiamantes }));
+        almacenDiamantes.addEventListener('dragover', this.allowDrop);
     }
     /**
      * Funcion Drag and Drop mover carta
@@ -97,19 +99,16 @@ export class Solitario {
     }
 
     drag(ev) {
-        console.log(ev.currentTarget.childNodes);
         ev.dataTransfer.setData("text", ev.target.id);
-
     }
 
-    drop(ev) {
+    drop(this: { app, html }, ev) {
+        console.log(this)
         ev.preventDefault();
-        console.log(ev);
         var data = ev.dataTransfer.getData("text");
         const idCarta = data + 'Carta';
         const cartaOrigenHtml = document.getElementById(idCarta);
         const hermanos = cartaOrigenHtml.parentElement.children;
-        console.log(hermanos);
         let originalEncontrado = false;
         let cartasDependientes: any[] = [];
         for (let i = 0; i < hermanos.length; i++) {
@@ -123,13 +122,13 @@ export class Solitario {
             }
         }
         const idColumnaDes = ev.target.id + 'Carta';
-        const columnaDestino = ev.path[2];
-        if (this.moverCarta(idCarta, idColumnaDes)) {
-            ev.path[2].appendChild(document.getElementById(idCarta));
+        if (this.app.moverCarta(idCarta, idColumnaDes)) {
+            this.app.descubrirCarta(cartaOrigenHtml);
+            this.html.appendChild(document.getElementById(idCarta));
             for (let carta of cartasDependientes) {
-                ev.path[2].appendChild(document.getElementById(carta.id));
+                this.html.appendChild(document.getElementById(carta.id));
             }
-            this.descubrirCarta(cartaOrigenHtml);
+           
         }
 
 
@@ -160,21 +159,24 @@ export class Solitario {
             ultimaCarta = carta;
         }
         document.getElementById("mazoEntrada").innerHTML = htmlMazoEntrada;
-        document.getElementById(ultimaCarta.numero + ultimaCarta.palo + 'Carta').addEventListener('click', this.robarCarta.bind(this));
+        const cartaHTML = document.getElementById(ultimaCarta.numero + ultimaCarta.palo + 'Carta')
+        cartaHTML.addEventListener('click', this.robarCarta.bind({ app: this, html: cartaHTML }));
 
     }
     /**
      * Voltear carta del mazo al robarla
      */
-    robarCarta(ev) {
+    robarCarta(this: { app, html }, ev) {
+        console.log(this);
+        console.log(ev)
         ev.preventDefault();
         let primeraCartaMazoEntrada: Carta = Carta.generaCartaId(ev.target.id);
         const mazoRobo = document.getElementById('mazoRobo');
         const cartaMazoEntrada = document.getElementById(primeraCartaMazoEntrada.numero + primeraCartaMazoEntrada.palo + 'Carta');
-        cartaMazoEntrada.addEventListener('dragstart', this.drag);
+        cartaMazoEntrada.addEventListener('dragstart', this.app.drag);
         mazoRobo.appendChild(cartaMazoEntrada);
         document.getElementById(ev.target.id).setAttribute('src', 'img/' + ev.target.id + '.PNG');
-        this.asignarNuevoRobo();
+        this.app.asignarNuevoRobo();
     }
 
     /**
@@ -182,29 +184,27 @@ export class Solitario {
      */
     asignarNuevoRobo() {
         const ultimaCarta = document.getElementById("mazoEntrada").lastChild;
-        ultimaCarta.addEventListener('click', this.robarCarta.bind(this));
+        ultimaCarta.addEventListener('click', this.robarCarta.bind({ app: this, html: ultimaCarta }));
 
     }
     /**
      * Funcion para poder almacenar cartas en los almacenes
      */
-    dropAlmacen(ev) {
-        console.log(ev);
-        const almacenDestino = ev.target;
+    dropAlmacen(this: { app, html }, ev) {
+
+        const almacenDestino = this.html;
+        console.log(almacenDestino)
         var dataCartaMandada = ev.dataTransfer.getData("text");
         const cartaHTML = document.getElementById(dataCartaMandada + 'Carta');
         const cartaMandada: Carta = Carta.generaCartaId(dataCartaMandada);
-        console.log(almacenDestino.lastChild);
-        console.log(cartaMandada.numero);
-        console.log(almacenDestino.children[almacenDestino.children.length - 1]);
-        if(this.compruebaPalo(cartaMandada, almacenDestino.id)){
+        if (this.app.compruebaPalo(cartaMandada, almacenDestino.id)) {
             if (!almacenDestino.children[almacenDestino.children.length - 1] && cartaMandada.numero === 1) {
                 //No tiene ninguna carta aun
-                this.descubrirCarta(cartaHTML);
+                this.app.descubrirCarta(cartaHTML);
                 almacenDestino.appendChild(cartaHTML);
             }
         }
-        
+
     }
 
     /**
@@ -238,7 +238,8 @@ export class Solitario {
     /**
      * Descubre carta
      */
-    descubrirCarta(cartaHTML){
+    descubrirCarta(cartaHTML) {
+        console.log(cartaHTML)
         const cartaAnterior: any = cartaHTML.previousSibling;
         const identificador = cartaAnterior.id.split('Carta')[0];
         const cartaDescubierta = document.getElementById(identificador);

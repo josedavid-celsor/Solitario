@@ -12,7 +12,6 @@ export class Carta {
      * @returns un objeto carta
      */
     public static generaCartaId(id:string) :Carta{
-        console.log(id);
         const paloOrigen:string = id[id.length - 1];
         const numeroOrigen:number =  parseInt(id.split(paloOrigen)[0]); 
         let color;

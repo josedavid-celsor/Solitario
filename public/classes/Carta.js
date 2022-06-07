@@ -14,7 +14,6 @@ export class Carta {
      * @returns un objeto carta
      */
     static generaCartaId(id) {
-        console.log(id);
         const paloOrigen = id[id.length - 1];
         const numeroOrigen = parseInt(id.split(paloOrigen)[0]);
         let color;
