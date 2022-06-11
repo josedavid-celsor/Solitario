@@ -13,6 +13,7 @@ body {
 } */
 
 
+
 #mazos {
     display: flex;
     flex-direction: column;
@@ -27,22 +28,28 @@ body {
 }
 
 #almacenTrebol {
-    background-color: gray !important;
+    background-image: url('./img/TREBOL.PNG');
+    background-size: contain;
+    /**background-color: gray !important;**/
 }
 
 #almacenCorazones {
-
-    background-color: red !important;
+    background-color: white;
+    background-image: url('./img/CORAZON.PNG');
+    background-size: contain;
+    
 }
 
 #almacenPicas {
-
-    background-color: black !important;
+    background:white;
+    background-image: url('./img/PICA.PNG');
+    background-size: contain;
 }
 
 #almacenDiamantes {
-
-    background-color: rgba(138, 12, 12, 0.884) !important;
+    background:white;
+    background-image: url('./img/DIAMANTE.PNG');
+    background-size: contain;;
 }
 
 
@@ -80,9 +87,15 @@ ul {
     grid-row-start: 1;
     grid-column-start: 1;
 }
-
+.columnasHTML{
+    min-width: 5vw;
+    min-height: 15vh;
+    border:1px solid white;
+    border-radius: 2px;
+    padding: 0;
+}
 .columnasHTML .carta+.carta {
-    margin-top: -7vh;
+    margin-top: -13vh;
 }
 
 
@@ -96,11 +109,18 @@ ul {
     padding: 2px;
     margin-left: 2vw;
 }
+#mazoRobo .carta:not(:last-child){
+    pointer-events: none;
+}
+
+
+
+
 #mazoRobo > .carta + .carta{
     margin-top: -13vh!important;
 }
 #mazoEntrada > .carta + .carta{
-    margin-top: -16vh!important;
+    margin-top: -15.5vh!important;
 }
 
 .depositos{
@@ -109,8 +129,50 @@ ul {
 }
 
 .deposito{
+    position: relative;
     width:5vw;
-    height: 21vh;
-    
+    height: 15vh;
     display: inline-block;
+    
 }
+.deposito > .carta + .carta{
+    margin-top: -15.5vh;
+}
+.deposito > * {
+    pointer-events: none;
+}
+
+
+@media (max-width: 1200px) {
+    #cuerpoTablero{
+        padding: 0;
+    }
+    img{
+        height: 17.5vh;
+        width: 7.5vw;
+    }
+
+    #mazoRobo > .carta + .carta{
+        margin-top: -15vh!important;
+    }
+    #mazoEntrada > .carta + .carta{
+        margin-top: -17.5vh!important;
+    }
+  }
+
+  @media (max-width: 800px) {
+    #cuerpoTablero{
+        padding: 0;
+    }   
+    img{
+        height: 13.5vh;
+        width: 9vw;
+    }
+
+    #mazoRobo > .carta + .carta{
+        margin-top: -15vh!important;
+    }
+    #mazoEntrada > .carta + .carta{
+        margin-top: -16.5vh!important;
+    }
+  }

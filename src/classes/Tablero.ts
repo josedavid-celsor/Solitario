@@ -74,8 +74,6 @@ export class Tablero {
     */
     rellenarMazoEntrada(){
         this.mazoEntrada = this.todasCartas.splice(0);
-        console.log(this.mazoEntrada)
-        //this.mazoEntrada.shift();
     }
     
     
