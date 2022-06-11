@@ -86,6 +86,9 @@ export class Solitario {
         almacenTrebol.addEventListener('dragover', this.allowDrop);
         almacenDiamantes.addEventListener('drop', this.dropAlmacen.bind({ app: this, html: almacenDiamantes }));
         almacenDiamantes.addEventListener('dragover', this.allowDrop);
+
+        const reiniciar = document.getElementById('reiniciar');
+        reiniciar.addEventListener('click',this.reiniciaPartida.bind({ app: this, html: reiniciar }));
     }
     /**
      * Funcion Drag and Drop mover carta
@@ -265,6 +268,11 @@ export class Solitario {
         if (AC.children.length === 13 && AP.children.length === 13 && AT.children.length === 13 && AD.children.length === 13) {
             alert('¡HAS GANADO!');
         }
+    }
+
+    reiniciaPartida(){
+        this.app.solitario = new Solitario();
+        alert('Partida reiniciada... buena suerte')
     }
 }
 const solitario = new Solitario();
